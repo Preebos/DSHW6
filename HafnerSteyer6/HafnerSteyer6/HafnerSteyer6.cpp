@@ -23,7 +23,6 @@ struct node {
 	node* next;
 };
 
-void addToHashTable(vector<int> &hashTable, int value, collisionResolutionType crType) {
 
 
 /*	
