@@ -22,19 +22,31 @@ void addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 	int index = 0;
 	if (crType == LINEAR_PROBING) {
 		index = value % SIZE;
-		hashTable[index] = value;
+		if (hashTable[index] == 0) {
+			// put value into empty slot
+			hashTable[index] = value;
+		}
+		else {
+			// resolve collision using linear probing
+			while (hashTable[index] != 0) {
+				index++;
+				if (hashTable[index] == 0) {
+					hashTable[index] = value;
+				}
+			}
+		}
 	}
 	
 	else if (crType == QUADRATIC_PROBING) {
-
+		index = value % SIZE;
 	}
 
 	else if (crType == DOUBLE_HASHING) {
-
+		index = value % SIZE;
 	}
 
-	else {
-
+	else { // (crType == CHAINING)
+		index = value % SIZE;
 	}
 
 	return;
