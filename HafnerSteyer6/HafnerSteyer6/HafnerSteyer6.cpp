@@ -18,6 +18,11 @@ using namespace std;
 enum collisionResolutionType {LINEAR_PROBING, QUADRATIC_PROBING, DOUBLE_HASHING, CHAINING};
 const int SIZE = 23;
 
+
+
+/*	Add key to the hash table
+ *	RETURNS: true if successful, false if failure
+ */ 
 bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType crType) {
 	int index = 0;
 	if (crType == LINEAR_PROBING) {
