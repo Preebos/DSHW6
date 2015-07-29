@@ -15,7 +15,7 @@
 
 using namespace std;
 
-enum collisionResolutionType {LINEAR_PROBING, QUADRATIC_PROBING, DOUBLE_HASHING};
+enum collisionResolutionType { LINEAR_PROBING, QUADRATIC_PROBING, DOUBLE_HASHING };
 const int SIZE = 23;
 
 struct node {
@@ -37,12 +37,13 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 		}
 		else {
 			// resolve collision using linear probing
-			int count = 0;
+			unsigned count = 0;
 			while (hashTable[index] != 0) {
 				index = (index + 1) % hashTable.size();
 				count++;
 				if (hashTable[index] == 0) {
 					hashTable[index] = value;
+					return true;
 				}
 				else if (count >= hashTable.size()) {
 					// Hash is full
@@ -62,7 +63,7 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 		}
 		else {
 			// resolve collision using linear probing
-			int count = 0;
+			unsigned count = 0;
 			int skipFactor = 1;
 			while (hashTable[index] != 0) {
 
@@ -72,6 +73,7 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 
 				if (hashTable[index] == 0) {
 					hashTable[index] = value;
+					return 0;
 				}
 				else if (count >= hashTable.size()) { // Cannot find empty slot
 					cout << "Cannot add key; hash table is full" << endl;
@@ -85,7 +87,7 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 		index = value % SIZE;
 	}
 
-	return true;
+	return false;
 	}
 
 void addToHashTable(vector<node*> &hashTable, int value) {
@@ -189,18 +191,18 @@ int main() {
 	cout << "Add integers to the hash table by typing them here and then pressing enter after each number: \n";
 	while (!hashTableFull) {
 		cin >> value;
-		//addToHashTable(hashTable1, value, LINEAR_PROBING);
-		//if ((double)numOfEntries(hashTable1) / (double)SIZE >= loadRatio) {
-		//	hashTableFull = true;
-		//}
-		addToHashTable(hashTable4, value);
-		if ((double)numOfEntries(hashTable4) / (double)SIZE >= loadRatio) {
+		addToHashTable(hashTable1, value, QUADRATIC_PROBING);
+		if ((double)numOfEntries(hashTable1) / (double)SIZE >= loadRatio) {
 			hashTableFull = true;
 		}
+		/*addToHashTable(hashTable4, value);
+		if ((double)numOfEntries(hashTable4) / (double)SIZE >= loadRatio) {
+			hashTableFull = true;
+		}*/
 	}
 
-	//printHashTable(hashTable1);
-	printHashTable(hashTable4);
+
+	printHashTable(hashTable1);
 
 	system("pause");
 	return 0;
