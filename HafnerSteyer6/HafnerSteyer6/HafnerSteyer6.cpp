@@ -15,9 +15,15 @@
 
 using namespace std;
 
-enum collisionResolutionType {LINEAR_PROBING, QUADRATIC_PROBING, DOUBLE_HASHING, CHAINING};
+enum collisionResolutionType {LINEAR_PROBING, QUADRATIC_PROBING, DOUBLE_HASHING};
 const int SIZE = 23;
 
+struct node {
+	int val;
+	node* next;
+};
+
+void addToHashTable(vector<int> &hashTable, int value, collisionResolutionType crType) {
 
 
 /*	
@@ -46,9 +52,9 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 					// Hash is full
 					cout << "Cannot add key; hash table is full" << endl;
 					return false;
-				}
 			}
 		}
+	}
 	}
 	
 	else if (crType == QUADRATIC_PROBING) {
@@ -79,15 +85,28 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 		}
 	}
 
-	else if (crType == DOUBLE_HASHING) {
-		index = value % SIZE;
-	}
-
-	else { // (crType == CHAINING)
+	else { // (crType == DOUBLE_HASHING)
 		index = value % SIZE;
 	}
 
 	return;
+	}
+
+void addToHashTable(vector<node*> &hashTable, int value) {
+	int index = value % SIZE;
+	node* newNode = new node;
+	newNode->val = value;
+	newNode->next = NULL;
+	if (hashTable[index] == NULL) {
+		hashTable[index] = newNode;
+}
+	else {
+		node* curNode = hashTable[index];
+		while (curNode->next != NULL) {
+			curNode = curNode->next;
+		}
+		curNode->next = newNode;
+	}
 }
 
 int numOfEntries(vector<int> hashTable) {
@@ -100,6 +119,20 @@ int numOfEntries(vector<int> hashTable) {
 	return count;
 }
 
+int numOfEntries(vector<node*> hashTable) {
+	int count = 0;
+	node* curNode = NULL;
+	for (unsigned int n = 0; n < hashTable.size(); n++) {
+		if (hashTable[n] != NULL) {
+			curNode = hashTable[n];
+			while (curNode != NULL) {
+				count++;
+				curNode = curNode->next;
+			}
+		}
+	}
+	return count;
+}
 
 void printHashTable(vector<int> hashTable) {
 	cout << "Index: \tEntry: \n";
@@ -113,19 +146,41 @@ void printHashTable(vector<int> hashTable) {
 	}
 }
 
+void printHashTable(vector<node*> hashTable) {
+	node* curNode = NULL;
+	cout << "Index: \tEntries: \n";
+	for (unsigned int n = 0; n < hashTable.size(); n++) {
+		cout << n;
+		if (hashTable[n] != NULL) {
+			curNode = hashTable[n];
+			while (curNode != NULL) {
+				cout << "\t" << curNode->val;
+				curNode = curNode->next;
+			}
+			cout << endl;
+		}
+		else {
+			cout << "\t" << "----" << endl;
+		}
+	}
+}
+
 int main() {
 	vector<int> hashTable1;
 	vector<int> hashTable2;
 	vector<int> hashTable3;
-	vector<int> hashTable4;
+	vector<node*> hashTable4;
 	bool hashTableFull = false;
 	int value;
 
 	for (int n = 0; n < SIZE; n++) {
-		hashTable1.push_back(0);
+		hashTable1.push_back(NULL);
+		hashTable2.push_back(NULL);
+		hashTable3.push_back(NULL);
+		hashTable4.push_back(NULL);
 	}
 
-	double loadRatio = 0;
+	double loadRatio = 1;
 	cout << "This application will insert values into a hash table of size " << SIZE << ".\n\n";
 	cout << "What load ratio would you like to use? ";
 	cout << "(enter a decimal representation of a percentage, e.g. 0.2 or 0.55)\n";
@@ -138,13 +193,18 @@ int main() {
 	cout << "Add integers to the hash table by typing them here and then pressing enter after each number: \n";
 	while (!hashTableFull) {
 		cin >> value;
-		addToHashTable(hashTable1, value, LINEAR_PROBING);
-		if ((double)numOfEntries(hashTable1) / (double)SIZE >= loadRatio) {
+		//addToHashTable(hashTable1, value, LINEAR_PROBING);
+		//if ((double)numOfEntries(hashTable1) / (double)SIZE >= loadRatio) {
+		//	hashTableFull = true;
+		//}
+		addToHashTable(hashTable4, value);
+		if ((double)numOfEntries(hashTable4) / (double)SIZE >= loadRatio) {
 			hashTableFull = true;
 		}
 	}
 
-	printHashTable(hashTable1);
+	//printHashTable(hashTable1);
+	printHashTable(hashTable4);
 
 	system("pause");
 	return 0;
