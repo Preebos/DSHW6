@@ -18,20 +18,28 @@ using namespace std;
 enum collisionResolutionType {LINEAR_PROBING, QUADRATIC_PROBING, DOUBLE_HASHING, CHAINING};
 const int SIZE = 23;
 
-void addToHashTable(vector<int> &hashTable, int value, collisionResolutionType crType) {
+bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType crType) {
 	int index = 0;
 	if (crType == LINEAR_PROBING) {
 		index = value % SIZE;
 		if (hashTable[index] == 0) {
 			// put value into empty slot
 			hashTable[index] = value;
+			return true;
 		}
 		else {
 			// resolve collision using linear probing
+			int count = 0;
 			while (hashTable[index] != 0) {
-				index++;
+				index = (index + 1) % hashTable.size();
+				count++;
 				if (hashTable[index] == 0) {
 					hashTable[index] = value;
+				}
+				else if (count >= hashTable.size()) {
+					// Hash is full
+					cout << "Cannot add key; hash table is full" << endl;
+					return false;
 				}
 			}
 		}
@@ -39,6 +47,31 @@ void addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 	
 	else if (crType == QUADRATIC_PROBING) {
 		index = value % SIZE;
+		if (hashTable[index] == 0) {
+			// put value into empty slot
+			hashTable[index] = value;
+			return true;
+		}
+		else {
+			// resolve collision using linear probing
+			int count = 0;
+			int skipFactor = 1;
+			while (hashTable[index] != 0) {
+
+				index = (index + skipFactor * skipFactor) % hashTable.size(); // increase by skipFacto^2 each time (1, 4, 9, 16, etc)
+				count += skipFactor * skipFactor; // Count how many we have skipped so we can exit if the hash table is full
+				skipFactor++; // double the amount of indices we skip
+
+				if (hashTable[index] == 0) {
+					hashTable[index] = value;
+				}
+				else if (count >= hashTable.size()) {
+					// Hash is full
+					cout << "Cannot add key; hash table is full" << endl;
+					return false;
+				}
+			}
+		}
 	}
 
 	else if (crType == DOUBLE_HASHING) {
