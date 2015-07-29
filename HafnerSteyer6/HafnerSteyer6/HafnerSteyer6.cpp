@@ -64,14 +64,13 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 			while (hashTable[index] != 0) {
 
 				index = (index + skipFactor * skipFactor) % hashTable.size(); // increase by skipFacto^2 each time (1, 4, 9, 16, etc)
-				count += skipFactor * skipFactor; // Count how many we have skipped so we can exit if the hash table is full
+				count++;
 				skipFactor++; // double the amount of indices we skip
 
 				if (hashTable[index] == 0) {
 					hashTable[index] = value;
 				}
-				else if (count >= hashTable.size()) {
-					// Hash is full
+				else if (count >= hashTable.size()) { // Cannot find empty slot
 					cout << "Cannot add key; hash table is full" << endl;
 					return false;
 				}
