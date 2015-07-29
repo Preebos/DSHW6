@@ -22,7 +22,7 @@ void addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 	int index = 0;
 	if (crType == LINEAR_PROBING) {
 		index = value % SIZE;
-		if (hashTable[index] == 0) {
+		if (hashTable[index] == NULL) {
 			// put value into empty slot
 			hashTable[index] = value;
 		}
@@ -84,7 +84,7 @@ int main() {
 	int value;
 
 	for (int n = 0; n < SIZE; n++) {
-		hashTable1.push_back(0);
+		hashTable1.push_back(NULL);
 	}
 
 	double loadRatio = 0;
