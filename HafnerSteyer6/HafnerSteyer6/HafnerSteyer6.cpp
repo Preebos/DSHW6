@@ -24,26 +24,64 @@ struct node {
 };
 
 void addToHashTable(vector<int> &hashTable, int value, collisionResolutionType crType) {
+
+
+/*	Add key to the hash table
+ *	RETURNS: true if successful, false if failure
+ */ 
+bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType crType) {
 	int index = 0;
 	if (crType == LINEAR_PROBING) {
 		index = value % SIZE;
-		if (hashTable[index] == NULL) {
+		if (hashTable[index] == 0) {
 			// put value into empty slot
 			hashTable[index] = value;
+			return true;
 		}
 		else {
 			// resolve collision using linear probing
+			int count = 0;
 			while (hashTable[index] != 0) {
-				index++;
+				index = (index + 1) % hashTable.size();
+				count++;
 				if (hashTable[index] == 0) {
 					hashTable[index] = value;
 				}
+				else if (count >= hashTable.size()) {
+					// Hash is full
+					cout << "Cannot add key; hash table is full" << endl;
+					return false;
 			}
 		}
+	}
 	}
 	
 	else if (crType == QUADRATIC_PROBING) {
 		index = value % SIZE;
+		if (hashTable[index] == 0) {
+			// put value into empty slot
+			hashTable[index] = value;
+			return true;
+		}
+		else {
+			// resolve collision using linear probing
+			int count = 0;
+			int skipFactor = 1;
+			while (hashTable[index] != 0) {
+
+				index = (index + skipFactor * skipFactor) % hashTable.size(); // increase by skipFacto^2 each time (1, 4, 9, 16, etc)
+				count++;
+				skipFactor++; // double the amount of indices we skip
+
+				if (hashTable[index] == 0) {
+					hashTable[index] = value;
+				}
+				else if (count >= hashTable.size()) { // Cannot find empty slot
+					cout << "Cannot add key; hash table is full" << endl;
+					return false;
+				}
+			}
+		}
 	}
 
 	else { // (crType == DOUBLE_HASHING)
@@ -51,7 +89,7 @@ void addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 	}
 
 	return;
-}
+	}
 
 void addToHashTable(vector<node*> &hashTable, int value) {
 	int index = value % SIZE;
@@ -60,7 +98,7 @@ void addToHashTable(vector<node*> &hashTable, int value) {
 	newNode->next = NULL;
 	if (hashTable[index] == NULL) {
 		hashTable[index] = newNode;
-	}
+}
 	else {
 		node* curNode = hashTable[index];
 		while (curNode->next != NULL) {
