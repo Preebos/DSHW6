@@ -92,6 +92,10 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 	return false;
 }
 
+/*
+ * Adds key to hash table, this one uses hashing
+ * 
+ */
 void addToHashTable(vector<node*> &hashTable, int value) {
 	int index = value % SIZE;
 	node* newNode = new node;
