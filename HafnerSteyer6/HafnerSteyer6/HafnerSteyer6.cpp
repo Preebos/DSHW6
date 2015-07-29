@@ -30,9 +30,8 @@ struct node {
  *	RETURNS: true if successful, false if failure
  */
 bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType crType) {
-	int index = 0;
+	int index = value % SIZE;
 	if (crType == LINEAR_PROBING) {
-		index = value % SIZE;
 		if (hashTable[index] == 0) {
 			// put value into empty slot
 			hashTable[index] = value;
@@ -57,7 +56,6 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 		}
 	}
 	else if (crType == QUADRATIC_PROBING) {
-		index = value % SIZE;
 		if (hashTable[index] == 0) {
 			// put value into empty slot
 			hashTable[index] = value;
@@ -85,7 +83,28 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 		}
 	}
 	else { // (crType == DOUBLE_HASHING)
-		index = value % SIZE;
+		if (hashTable[index] == 0) {
+			// put value into empty slot
+			hashTable[index] = value;
+			return true;
+		}
+		else {
+			// resolve collision using double hashing
+			unsigned count = 0;
+			while (hashTable[index] != 0) {
+				index = (index + (17 - (value % 17))) % hashTable.size();
+				count++;
+				if (hashTable[index] == 0) {
+					hashTable[index] = value;
+					return true;
+				}
+				else if (count >= hashTable.size()) {
+					// Hash is full
+					cout << "Cannot add key; hash table is full" << endl;
+					return false;
+				}
+			}
+		}
 		return true;
 	}
 
