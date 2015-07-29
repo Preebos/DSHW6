@@ -23,9 +23,6 @@ struct node {
 	node* next;
 };
 
-void addToHashTable(vector<int> &hashTable, int value, collisionResolutionType crType) {
-
-
 /*	Add key to the hash table
  *	RETURNS: true if successful, false if failure
  */ 
@@ -88,7 +85,7 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 		index = value % SIZE;
 	}
 
-	return;
+	return true;
 	}
 
 void addToHashTable(vector<node*> &hashTable, int value) {
