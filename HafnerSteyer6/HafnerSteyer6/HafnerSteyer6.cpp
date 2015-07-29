@@ -56,7 +56,6 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 			}
 		}
 	}
-
 	else if (crType == QUADRATIC_PROBING) {
 		index = value % SIZE;
 		if (hashTable[index] == 0) {
@@ -76,7 +75,7 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 
 				if (hashTable[index] == 0) {
 					hashTable[index] = value;
-					return 0;
+					return true;
 				}
 				else if (count >= hashTable.size()) { // Cannot find empty slot
 					cout << "Cannot add key; hash table is full" << endl;
@@ -85,9 +84,9 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 			}
 		}
 	}
-
 	else { // (crType == DOUBLE_HASHING)
 		index = value % SIZE;
+		return true;
 	}
 
 	return false;
