@@ -8,6 +8,9 @@
 // Preconditions: ?
 // Postconditions: ?
 
+
+// TODO: add comparison increments
+
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -15,14 +18,24 @@
 
 using namespace std;
 
+
 enum collisionResolutionType { LINEAR_PROBING, QUADRATIC_PROBING, DOUBLE_HASHING };
-const int SIZE = 23;
+const int SIZE = 1009;
 
 struct node {
 	int val;
 	node* next;
 };
 
+
+// For getting data
+vector<int> arrayOfHashTables[3][16];
+vector<node*> chainingHashTable[16];
+
+int totalComparisons[4][16];
+int totalInsertions[16];
+int averageComparisons[4][16];
+int counter;
 
 
 /*
@@ -31,23 +44,35 @@ struct node {
  */
 bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType crType) {
 	int index = value % SIZE;
+	counter = 0;
+
 	if (crType == LINEAR_PROBING) {
 		if (hashTable[index] == 0) {
 			// put value into empty slot
 			hashTable[index] = value;
+			counter++;
 			return true;
 		}
 		else {
+			counter++;
+
+
 			// resolve collision using linear probing
 			unsigned count = 0;
 			while (hashTable[index] != 0) {
+				counter++;
+
 				index = (index + 1) % hashTable.size();
 				count++;
 				if (hashTable[index] == 0) {
+					counter++;
+
 					hashTable[index] = value;
 					return true;
 				}
 				else if (count >= hashTable.size()) {
+					counter += 2; // 1 addition for each if statement
+
 					// Hash is full
 					cout << "Cannot add key; hash table is full" << endl;
 					return false;
@@ -55,52 +80,77 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 			}
 		}
 	}
+
+
+
 	else if (crType == QUADRATIC_PROBING) {
 		if (hashTable[index] == 0) {
+			counter++;
+
 			// put value into empty slot
 			hashTable[index] = value;
 			return true;
 		}
 		else {
+			counter++;
+
 			// resolve collision using linear probing
 			unsigned count = 0;
 			int skipFactor = 1;
 			while (hashTable[index] != 0) {
+				counter++;
 
 				index = (index + skipFactor * skipFactor) % hashTable.size(); // increase by skipFacto^2 each time (1, 4, 9, 16, etc)
 				count++;
 				skipFactor++; // double the amount of indices we skip
 
 				if (hashTable[index] == 0) {
+					counter++;
+					
 					hashTable[index] = value;
 					return true;
 				}
 				else if (count >= hashTable.size()) { // Cannot find empty slot
+					counter += 2; // Went through 2 comparisons to get here
+
 					cout << "Cannot add key; hash table is full" << endl;
 					return false;
 				}
 			}
 		}
 	}
-	else { // (crType == DOUBLE_HASHING)
+
+
+
+	else  if (crType == DOUBLE_HASHING) {
+
 		if (hashTable[index] == 0) {
+			counter++;
+
 			// put value into empty slot
 			hashTable[index] = value;
 			return true;
 		}
 		else {
+			counter++;
+
 			// resolve collision using double hashing
 			unsigned count = 0;
 			while (hashTable[index] != 0) {
+				counter++;
+
 				index = (index + (17 - (value % 17))) % hashTable.size();
 				count++;
 				if (hashTable[index] == 0) {
+					counter++;
+
 					hashTable[index] = value;
 					return true;
 				}
 				else if (count >= hashTable.size()) {
+					counter += 2; // Took two comparisons to get here
+
 					// Hash is full
-					cout << "Cannot add key; hash table is full" << endl;
 					return false;
 				}
 			}
@@ -108,26 +158,38 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 		return true;
 	}
 
+
+
 	return false;
 }
 
 /*
- * Adds key to hash table, this one uses hashing
+ * Adds key to hash table, this one uses chaining
  * 
  */
 void addToHashTable(vector<node*> &hashTable, int value) {
+	counter = 0;
+
 	int index = value % SIZE;
 	node* newNode = new node;
 	newNode->val = value;
 	newNode->next = NULL;
 	if (hashTable[index] == NULL) {
+		counter++;
+
 		hashTable[index] = newNode;
 	}
 	else {
+		counter++;
+
+
 		node* curNode = hashTable[index];
 		while (curNode->next != NULL) {
+			counter++;
 			curNode = curNode->next;
 		}
+		counter++;
+
 		curNode->next = newNode;
 	}
 }
@@ -189,7 +251,7 @@ void printHashTable(vector<node*> hashTable) {
 }
 
 int main() {
-	vector<int> hashTable1;
+	/*vector<int> hashTable1;
 	vector<int> hashTable2;
 	vector<int> hashTable3;
 	vector<node*> hashTable4;
@@ -213,21 +275,86 @@ int main() {
 		cin >> loadRatio;
 	}
 
-	cout << "Add integers to the hash table by typing them here and then pressing enter after each number: \n";
+	/*cout << "Add integers to the hash table by typing them here and then pressing enter after each number: \n";
 	while (!hashTableFull) {
 		cin >> value;
-		addToHashTable(hashTable1, value, QUADRATIC_PROBING);
+		addToHashTable(hashTable1, value, DOUBLE_HASHING);
 		if ((double)numOfEntries(hashTable1) / (double)SIZE >= loadRatio) {
 			hashTableFull = true;
 		}
-		/*addToHashTable(hashTable4, value);
-		if ((double)numOfEntries(hashTable4) / (double)SIZE >= loadRatio) {
-			hashTableFull = true;
-		}*/
+	}
+	*/
+
+
+
+	// PART 2
+	srand(time(NULL));
+
+	// Same random numbers so we can accurately test
+	vector<int> numberSequence;
+	for (int i = 0; i < SIZE; i++) {
+		numberSequence.push_back((rand() % 10000) + 1);
+	}
+
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 16; j++) {
+			for (int k = 0; k < SIZE; k++) {
+				arrayOfHashTables[i][j].push_back(NULL);
+			}
+		}
+	}
+	for (int i = 0; i < 16; i++) {
+		for (int j = 0; j < SIZE; j++) {
+			chainingHashTable[i].push_back(NULL);
+		}
+	}
+
+	
+
+	
+
+	double maxLoadRatio = .1;
+	for (int i = 0; i < 16; i++) {
+
+		for (int j = 0; j < SIZE; j++) {
+			addToHashTable(arrayOfHashTables[0][i], numberSequence[j], LINEAR_PROBING);
+			totalComparisons[0][i] = counter;
+
+
+			addToHashTable(arrayOfHashTables[1][i], numberSequence[j], QUADRATIC_PROBING);
+			totalComparisons[1][i] = counter;
+
+			
+			addToHashTable(arrayOfHashTables[2][i], numberSequence[j], DOUBLE_HASHING);
+			totalComparisons[2][i] = counter;
+
+
+			addToHashTable(chainingHashTable[i], numberSequence[j]);
+			totalComparisons[3][i] = counter;
+
+			
+			// Break if load ratio is reached
+			if ((double)j / SIZE >= maxLoadRatio) {
+				totalInsertions[i] = j;
+				break;
+			}
+		}
+
+		maxLoadRatio += 0.05;
 	}
 
 
-	printHashTable(hashTable1);
+	
+	
+	
+
+
+
+
+
+
+
+	//printHashTable(hashTable1);
 
 	system("pause");
 	return 0;
