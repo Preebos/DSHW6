@@ -34,7 +34,7 @@ vector<node*> chainingHashTable[16];
 
 int totalComparisons[4][16];
 int totalInsertions[16];
-int averageComparisons[4][16];
+double averageComparisons[4][16];
 int counter;
 
 
@@ -48,9 +48,11 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 
 	if (crType == LINEAR_PROBING) {
 		if (hashTable[index] == 0) {
+			counter++;
+
 			// put value into empty slot
 			hashTable[index] = value;
-			counter++;
+			
 			return true;
 		}
 		else {
@@ -77,6 +79,7 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 					cout << "Cannot add key; hash table is full" << endl;
 					return false;
 				}
+				counter += 2;
 			}
 		}
 	}
@@ -116,6 +119,7 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 					cout << "Cannot add key; hash table is full" << endl;
 					return false;
 				}
+				counter += 2;
 			}
 		}
 	}
@@ -153,6 +157,7 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 					// Hash is full
 					return false;
 				}
+				counter += 2;
 			}
 		}
 		return true;
@@ -334,7 +339,7 @@ int main() {
 
 			
 			// Break if load ratio is reached
-			if ((double)j / SIZE >= maxLoadRatio) {
+			if ((double)j / (double)SIZE >= maxLoadRatio) {
 				totalInsertions[i] = j;
 				break;
 			}
@@ -343,6 +348,19 @@ int main() {
 		maxLoadRatio += 0.05;
 	}
 
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 16; j++) {
+			averageComparisons[i][j] = totalComparisons[i][j] / (double)totalInsertions[j];
+		}
+	}
+
+
+	for (int r = 0; r < 4; r++) {
+		for (int c = 0; c < 16; c++) {
+			printf("%0.4f\t", averageComparisons[r][c]);
+		}
+		cout << endl << endl;
+	}
 
 	
 	
