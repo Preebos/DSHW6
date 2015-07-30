@@ -9,8 +9,6 @@
 // Postconditions: ?
 
 
-// TODO: add comparison increments
-
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -323,20 +321,21 @@ int main() {
 
 		for (int j = 0; j < SIZE; j++) {
 			addToHashTable(arrayOfHashTables[0][i], numberSequence[j], LINEAR_PROBING);
-			totalComparisons[0][i] = counter;
+			totalComparisons[0][j] = counter;
 
 
 			addToHashTable(arrayOfHashTables[1][i], numberSequence[j], QUADRATIC_PROBING);
-			totalComparisons[1][i] = counter;
+			totalComparisons[1][j] = counter;
 
 			
 			addToHashTable(arrayOfHashTables[2][i], numberSequence[j], DOUBLE_HASHING);
-			totalComparisons[2][i] = counter;
+			totalComparisons[2][j] = counter;
 
 
 			addToHashTable(chainingHashTable[i], numberSequence[j]);
-			totalComparisons[3][i] = counter;
+			totalComparisons[3][j] = counter;
 
+			cout << j << endl;
 			
 			// Break if load ratio is reached
 			if ((double)j / (double)SIZE >= maxLoadRatio) {
