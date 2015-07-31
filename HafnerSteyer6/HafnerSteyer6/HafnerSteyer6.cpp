@@ -177,6 +177,7 @@ void addToHashTable(vector<node*> &hashTable, int value) {
 	node* newNode = new node;
 	newNode->val = value;
 	newNode->next = NULL;
+
 	if (hashTable[index] == NULL) {
 		counter++;
 
@@ -253,6 +254,22 @@ void printHashTable(vector<node*> hashTable) {
 	}
 }
 
+void deleteHashTable(vector<node*> &hashTable) {
+	node* curNode = NULL;
+	node* nextNode = NULL;
+	for (unsigned int n = 0; n < hashTable.size(); n++) {
+		if (hashTable[n] != NULL) {
+			curNode = hashTable[n];
+			while (curNode != NULL) {
+				nextNode = curNode->next;
+				delete curNode;
+				curNode = nextNode;
+			}
+			cout << endl;
+		}
+	}
+}
+
 int main() {
 	/*vector<int> hashTable1;
 	vector<int> hashTable2;
@@ -313,10 +330,8 @@ int main() {
 	}
 
 	
-
-	
-
 	double maxLoadRatio = .1;
+	// for each different load ratio
 	for (int i = 0; i < 16; i++) {
 
 		for (int j = 0; j < SIZE; j++) {
@@ -335,11 +350,16 @@ int main() {
 			addToHashTable(chainingHashTable[i], numberSequence[j]);
 			totalComparisons[3][j] = counter;
 
-			cout << j << endl;
+			//cout << j << endl;
 			
 			// Break if load ratio is reached
 			if ((double)j / (double)SIZE >= maxLoadRatio) {
 				totalInsertions[i] = j;
+				deleteHashTable(chainingHashTable[i]);//
+				arrayOfHashTables[0][i].clear();//
+				arrayOfHashTables[1][i].clear();//
+				arrayOfHashTables[2][i].clear();//
+				chainingHashTable[i].clear();//
 				break;
 			}
 		}
@@ -347,14 +367,17 @@ int main() {
 		maxLoadRatio += 0.05;
 	}
 
+
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 16; j++) {
 			averageComparisons[i][j] = totalComparisons[i][j] / (double)totalInsertions[j];
 		}
 	}
 
-
+	char* collResTypes[4] = { "linear", "quadratic", "double", "chaining" };
+	cout << "load ratio:\t.10\t.15\t.20\t.25\t.30\t.35\t.40\t.45\t.50\t.55\t.60\t.65\t.70\t.75\t.80\t.85" << endl;
 	for (int r = 0; r < 4; r++) {
+		cout << collResTypes[r] << "\t";
 		for (int c = 0; c < 16; c++) {
 			printf("%0.4f\t", averageComparisons[r][c]);
 		}
