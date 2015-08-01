@@ -42,7 +42,7 @@ int counter;
  *	RETURNS: true if successful, false if failure
  */
 bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType crType) {
-	int index = value % SIZE;
+	int index = value % hashTable.size();
 	counter = 0;
 
 	if (crType == LINEAR_PROBING) {
@@ -174,7 +174,7 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 void addToHashTable(vector<node*> &hashTable, int value) {
 	counter = 0;
 
-	int index = value % SIZE;
+	int index = value % hashTable.size();
 	node* newNode = new node;
 	newNode->val = value;
 	newNode->next = NULL;
@@ -311,22 +311,23 @@ int main() {
 
 	// PART 2
 	srand(time(NULL));
+	int tableSize = 1009;
 
 	// Same random numbers so we can accurately test
 	vector<int> numberSequence;
-	for (int i = 0; i < SIZE; i++) {
+	for (int i = 0; i < tableSize; i++) {
 		numberSequence.push_back((rand() % 10000) + 1);
 	}
 
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 16; j++) {
-			for (int k = 0; k < SIZE; k++) {
+			for (int k = 0; k < tableSize; k++) {
 				arrayOfHashTables[i][j].push_back(NULL);
 			}
 		}
 	}
 	for (int i = 0; i < 16; i++) {
-		for (int j = 0; j < SIZE; j++) {
+		for (int j = 0; j < tableSize; j++) {
 			chainingHashTable[i].push_back(NULL);
 		}
 	}
@@ -336,7 +337,7 @@ int main() {
 	// for each different load ratio
 	for (int i = 0; i < 16; i++) {
 
-		for (int j = 0; j < SIZE; j++) {
+		for (int j = 0; j < tableSize; j++) {
 			addToHashTable(arrayOfHashTables[0][i], numberSequence[j], LINEAR_PROBING);
 			totalComparisons[0][i] = counter;
 
@@ -354,7 +355,7 @@ int main() {
 
 			
 			// Break if load ratio is reached
-			if ((double)j / (double)SIZE >= maxLoadRatio) {
+			if ((double)j / (double)tableSize >= maxLoadRatio) {
 				totalInsertions[i] = j;
 				deleteHashTable(chainingHashTable[i]);//
 				arrayOfHashTables[0][i].clear();//
