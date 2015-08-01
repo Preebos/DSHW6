@@ -47,7 +47,7 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 
 	if (crType == LINEAR_PROBING) {
 		if (hashTable[index] == 0) {
-			counter++;
+			counter++;	
 
 			// put value into empty slot
 			hashTable[index] = value;
@@ -168,8 +168,8 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 }
 
 /*
- * Adds key to hash table, this one uses chaining
- * 
+ * Adds key to hash table
+ * This one uses chaining
  */
 void addToHashTable(vector<node*> &hashTable, int value) {
 	counter = 0;
@@ -178,6 +178,7 @@ void addToHashTable(vector<node*> &hashTable, int value) {
 	node* newNode = new node;
 	newNode->val = value;
 	newNode->next = NULL;
+
 
 	if (hashTable[index] == NULL) {
 		counter++;
@@ -337,21 +338,20 @@ int main() {
 
 		for (int j = 0; j < SIZE; j++) {
 			addToHashTable(arrayOfHashTables[0][i], numberSequence[j], LINEAR_PROBING);
-			totalComparisons[0][j] = counter;
+			totalComparisons[0][i] = counter;
 
 
 			addToHashTable(arrayOfHashTables[1][i], numberSequence[j], QUADRATIC_PROBING);
-			totalComparisons[1][j] = counter;
+			totalComparisons[1][i] = counter;
 
 			
 			addToHashTable(arrayOfHashTables[2][i], numberSequence[j], DOUBLE_HASHING);
-			totalComparisons[2][j] = counter;
+			totalComparisons[2][i] = counter;
 
 
-			addToHashTable(chainingHashTable[i], numberSequence[j]);
-			totalComparisons[3][j] = counter;
+			addToHashTable(chainingHashTable[i], numberSequence[j]); // Crashes here
+			totalComparisons[3][i] = counter;
 
-			//cout << j << endl;
 			
 			// Break if load ratio is reached
 			if ((double)j / (double)SIZE >= maxLoadRatio) {
