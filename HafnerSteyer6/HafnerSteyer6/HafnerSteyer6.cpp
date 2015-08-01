@@ -333,25 +333,25 @@ int main() {
 	}
 
 	
-	double maxLoadRatio = .2;
+	double maxLoadRatio = .1;
 	// for each different load ratio
 	for (int i = 0; i < 16; i++) {
 
 		for (int j = 0; j < tableSize; j++) {
 			addToHashTable(arrayOfHashTables[0][i], numberSequence[j], LINEAR_PROBING);
-			totalComparisons[0][i] = counter;
+			totalComparisons[0][i] += counter;
 
 
 			addToHashTable(arrayOfHashTables[1][i], numberSequence[j], QUADRATIC_PROBING);
-			totalComparisons[1][i] = counter;
+			totalComparisons[1][i] += counter;
 
 			
 			addToHashTable(arrayOfHashTables[2][i], numberSequence[j], DOUBLE_HASHING);
-			totalComparisons[2][i] = counter;
+			totalComparisons[2][i] += counter;
 
 
 			addToHashTable(chainingHashTable[i], numberSequence[j]); // Crashes here
-			totalComparisons[3][i] = counter;
+			totalComparisons[3][i] += counter;
 
 			
 			// Break if load ratio is reached
@@ -376,7 +376,7 @@ int main() {
 		}
 	}
 
-	char* collResTypes[4] = { "linear", "quadratic", "double", "chaining" };
+	/*char* collResTypes[4] = { "linear", "quadratic", "double", "chaining" };
 	cout << "load ratio:\t.10\t.15\t.20\t.25\t.30\t.35\t.40\t.45\t.50\t.55\t.60\t.65\t.70\t.75\t.80\t.85" << endl;
 	for (int r = 0; r < 4; r++) {
 		cout << collResTypes[r] << "\t";
@@ -384,6 +384,17 @@ int main() {
 			printf("%0.4f\t", averageComparisons[r][c]);
 		}
 		cout << endl << endl;
+	}*/
+
+	char* collResTypes[4] = { "linear", "quadratic", "double", "chaining" };
+	char* ratios[16] = { ".10",".15",".20",".25",".30",".35",".40",".45",".50",".55",".60",".65",".70",".75",".80",".85" };
+	cout << "Ratio\tLinear\tQuad\tDouble\tChaining" << endl;
+	for (int c = 0; c < 16; c++) {
+		cout << ratios[c] << "\t";
+		for (int r = 0; r < 4; r++) {
+			printf("%0.3f\t", averageComparisons[r][c]);
+		}
+		cout << endl;
 	}
 
 	
