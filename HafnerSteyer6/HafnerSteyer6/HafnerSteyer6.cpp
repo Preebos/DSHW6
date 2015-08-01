@@ -332,7 +332,7 @@ int main() {
 	}
 
 	
-	double maxLoadRatio = .1;
+	double maxLoadRatio = .2;
 	// for each different load ratio
 	for (int i = 0; i < 16; i++) {
 
@@ -347,7 +347,6 @@ int main() {
 			
 			addToHashTable(arrayOfHashTables[2][i], numberSequence[j], DOUBLE_HASHING);
 			totalComparisons[2][j] = counter;
-
 
 			addToHashTable(chainingHashTable[i], numberSequence[j]);
 			totalComparisons[3][j] = counter;
