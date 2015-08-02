@@ -432,18 +432,12 @@ int main() {
 	}
 
 	int index;
-	for (int i = 0; i < SIZE; i++) {
+	for (int i = 0; i < tableSize; i++) {
 		index = rand() % randomSequence.size();
 		num = randomSequence[index];
 		numberSequence.push_back(num);
 		randomSequence.erase(randomSequence.begin() + index);
 	}
-
-
-
-
-
-
 
 
 	for (int i = 0; i < 3; i++) {
@@ -459,9 +453,6 @@ int main() {
 		}
 	}
 
-	// Redirect cout so that we don't get a ton of output from the following for loop
-	streambuf *coutbuf = cout.rdbuf();
-	cout.rdbuf(NULL);
 
 	
 	double maxLoadRatio = .1;
@@ -500,8 +491,6 @@ int main() {
 		maxLoadRatio += 0.05;
 	}
 
-	// Reset cout
-	cout.rdbuf(coutbuf);
 
 
 	for (int i = 0; i < 4; i++) {
