@@ -209,6 +209,7 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 /*
  * Adds key to hash table
  * This one uses chaining
+ *	RETURNS: true if successful, false if failure
  */
 bool addToHashTable(vector<node*> &hashTable, int value) {
 	counter = 0;
@@ -249,6 +250,7 @@ bool addToHashTable(vector<node*> &hashTable, int value) {
 	return true;
 }
 
+// returns number of keys stored in the hash table
 int numOfEntries(vector<int> hashTable) {
 	int count = 0;
 	for (unsigned int n = 0; n < hashTable.size(); n++) {
@@ -259,6 +261,7 @@ int numOfEntries(vector<int> hashTable) {
 	return count;
 }
 
+// returns number of keys stored in the hash table
 int numOfEntries(vector<node*> hashTable) {
 	int count = 0;
 	node* curNode = NULL;
@@ -274,6 +277,7 @@ int numOfEntries(vector<node*> hashTable) {
 	return count;
 }
 
+// prints current entries in the hash table
 void printHashTable(vector<int> hashTable) {
 	cout << "Index: \tEntry: \n";
 	for (unsigned int n = 0; n < hashTable.size(); n++) {
@@ -286,6 +290,7 @@ void printHashTable(vector<int> hashTable) {
 	}
 }
 
+// prints current entries in the hash table
 void printHashTable(vector<node*> hashTable) {
 	node* curNode = NULL;
 	cout << "Index: \tEntries: \n";
@@ -305,6 +310,7 @@ void printHashTable(vector<node*> hashTable) {
 	}
 }
 
+// returns true if key is in hash table
 bool isKeyInHashTable(vector<int> hashTable, int key) 
 {
 	// Invalid search
@@ -318,6 +324,7 @@ bool isKeyInHashTable(vector<int> hashTable, int key)
 	return false;
 }
 
+// returns true if key is in hash table
 bool isKeyInHashTable(vector<node*> hashTable, int key) {
 	
 	// Invalid Search
@@ -340,11 +347,7 @@ bool isKeyInHashTable(vector<node*> hashTable, int key) {
 	return false;
 }
 
-
-
-
-
-
+// release memory taken by the chaining hash table
 void deleteHashTable(vector<node*> &hashTable) {
 	node* curNode = NULL;
 	node* nextNode = NULL;
@@ -360,6 +363,7 @@ void deleteHashTable(vector<node*> &hashTable) {
 	}
 }
 
+// main function
 int main() {
 
 
@@ -399,6 +403,8 @@ int main() {
 			hashTableFull = true;
 		}
 	}
+
+	// print tables
 	cout << endl << "Linear Probing:" << endl;
 	printHashTable(hashTable1);
 	cout << endl <<"Quadratic Probing:" << endl;
