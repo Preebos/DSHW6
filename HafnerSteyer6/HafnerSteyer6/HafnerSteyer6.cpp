@@ -15,11 +15,13 @@
 #include <ctime>
 #include <vector>
 
+#include <fstream>
+
 using namespace std;
 
 
 enum collisionResolutionType { LINEAR_PROBING, QUADRATIC_PROBING, DOUBLE_HASHING };
-const int SIZE = 1009;
+const int SIZE = 23;
 
 struct node {
 	int val;
@@ -208,7 +210,7 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
  * Adds key to hash table
  * This one uses chaining
  */
-void addToHashTable(vector<node*> &hashTable, int value) {
+bool addToHashTable(vector<node*> &hashTable, int value) {
 	counter = 0;
 
 	int index = value % hashTable.size();
@@ -225,16 +227,21 @@ void addToHashTable(vector<node*> &hashTable, int value) {
 	else {
 		counter++;
 
-
 		node* curNode = hashTable[index];
 		while (curNode->next != NULL) {
 			counter++;
+			if (curNode->val == value) {
+				// the value has already been entered
+				cout << "That value is already in the table.";
+				return false;
+			}
 			curNode = curNode->next;
 		}
 		counter++;
 
 		curNode->next = newNode;
 	}
+	return true;
 }
 
 int numOfEntries(vector<int> hashTable) {
@@ -386,11 +393,12 @@ int main() {
 	
 
 
+	system("pause");
 
 	// PART 2
 
 	srand(time(NULL));
-	int tableSize = 1009;
+	int tableSize = 1019;
 
 	// Same random numbers so we can accurately test
 	vector<int> numberSequence;
@@ -455,26 +463,28 @@ int main() {
 		}
 	}
 
-	/*char* collResTypes[4] = { "linear", "quadratic", "double", "chaining" };
-	cout << "load ratio:\t.10\t.15\t.20\t.25\t.30\t.35\t.40\t.45\t.50\t.55\t.60\t.65\t.70\t.75\t.80\t.85" << endl;
-	for (int r = 0; r < 4; r++) {
-		cout << collResTypes[r] << "\t";
-		for (int c = 0; c < 16; c++) {
-			printf("%0.4f\t", averageComparisons[r][c]);
-		}
-		cout << endl << endl;
-	}*/
+
+	ofstream myfile;
+	myfile.open("C:\\Users\\Robin\\Source\\Repos\\DSHW6\\HafnerSteyer6\\Debug\\example.txt");
+	
+	
 
 	char* collResTypes[4] = { "linear", "quadratic", "double", "chaining" };
 	char* ratios[16] = { ".10",".15",".20",".25",".30",".35",".40",".45",".50",".55",".60",".65",".70",".75",".80",".85" };
 	cout << "Ratio\tLinear\tQuad\tDouble\tChaining" << endl;
+	myfile << "Ratio\tLinear\tQuad\tDouble\tChaining\n";
 	for (int c = 0; c < 16; c++) {
 		cout << ratios[c] << "\t";
+		myfile << ratios[c] << "\t";
 		for (int r = 0; r < 4; r++) {
 			printf("%0.3f\t", averageComparisons[r][c]);
+			myfile << averageComparisons[r][c] << "\t";
 		}
 		cout << endl;
+		myfile << "\n";
 	}
+
+	myfile.close();
 
 	
 	
