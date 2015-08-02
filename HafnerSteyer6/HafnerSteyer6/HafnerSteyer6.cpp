@@ -449,11 +449,11 @@ int main() {
 			// Break if load ratio is reached
 			if ((double)j / (double)tableSize >= maxLoadRatio) {
 				totalInsertions[i] = j;
-				deleteHashTable(chainingHashTable[i]);//
-				arrayOfHashTables[0][i].clear();//
-				arrayOfHashTables[1][i].clear();//
-				arrayOfHashTables[2][i].clear();//
-				chainingHashTable[i].clear();//
+				deleteHashTable(chainingHashTable[i]);
+				arrayOfHashTables[0][i].clear();
+				arrayOfHashTables[1][i].clear();
+				arrayOfHashTables[2][i].clear();
+				chainingHashTable[i].clear();
 				break;
 			}
 		}
