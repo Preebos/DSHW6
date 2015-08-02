@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <ctime>
 #include <vector>
-
+#include <string>
 #include <fstream>
 
 using namespace std;
@@ -435,6 +435,10 @@ int main() {
 		}
 	}
 
+	// Redirect cout so that we don't get a ton of output from the following for loop
+	streambuf *coutbuf = cout.rdbuf();
+	cout.rdbuf(NULL);
+
 	
 	double maxLoadRatio = .1;
 	// for each different load ratio
@@ -460,17 +464,20 @@ int main() {
 			// Break if load ratio is reached
 			if ((double)j / (double)tableSize >= maxLoadRatio) {
 				totalInsertions[i] = j;
-				deleteHashTable(chainingHashTable[i]);//
-				arrayOfHashTables[0][i].clear();//
-				arrayOfHashTables[1][i].clear();//
-				arrayOfHashTables[2][i].clear();//
-				chainingHashTable[i].clear();//
+				deleteHashTable(chainingHashTable[i]);
+				arrayOfHashTables[0][i].clear();
+				arrayOfHashTables[1][i].clear();
+				arrayOfHashTables[2][i].clear();
+				chainingHashTable[i].clear();
 				break;
 			}
 		}
 
 		maxLoadRatio += 0.05;
 	}
+
+	// Reset cout
+	cout.rdbuf(coutbuf);
 
 
 	for (int i = 0; i < 4; i++) {
