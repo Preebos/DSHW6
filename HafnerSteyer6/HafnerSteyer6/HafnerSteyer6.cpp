@@ -403,9 +403,27 @@ int main() {
 
 	// Same random numbers so we can accurately test
 	vector<int> numberSequence;
-	for (int i = 0; i < tableSize; i++) {
-		numberSequence.push_back((rand() % 10000) + 1);
+	vector<int> randomSequence;
+
+	int num;
+	for (int i = 0; i < 10000; i++) {
+		randomSequence.push_back(i + 1);
 	}
+
+	int index;
+	for (int i = 0; i < SIZE; i++) {
+		index = rand() % randomSequence.size();
+		num = randomSequence[index];
+		numberSequence.push_back(num);
+		randomSequence.erase(randomSequence.begin() + index);
+	}
+
+
+
+
+
+
+
 
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 16; j++) {
