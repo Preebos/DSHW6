@@ -420,6 +420,7 @@ int main() {
 		}
 	}
 
+	// Redirect cout so that we don't get a ton of output from the following for loop
 	streambuf *coutbuf = cout.rdbuf();
 	cout.rdbuf(NULL);
 
@@ -460,6 +461,7 @@ int main() {
 		maxLoadRatio += 0.05;
 	}
 
+	// Reset cout
 	cout.rdbuf(coutbuf);
 
 
