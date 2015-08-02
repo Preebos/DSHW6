@@ -209,6 +209,7 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 /*
  * Adds key to hash table
  * This one uses chaining
+ *	RETURNS: true if successful, false if failure
  */
 bool addToHashTable(vector<node*> &hashTable, int value) {
 	counter = 0;
@@ -228,11 +229,16 @@ bool addToHashTable(vector<node*> &hashTable, int value) {
 		counter++;
 
 		node* curNode = hashTable[index];
+		if (curNode->val == value) {
+			// the value has already been entered
+			cout << "Number is already in the hash table" << endl;
+			return false;
+		}
 		while (curNode->next != NULL) {
 			counter++;
 			if (curNode->val == value) {
 				// the value has already been entered
-				cout << "Number is already in the table." << endl;
+				cout << "Number is already in the hash table" << endl;
 				return false;
 			}
 			curNode = curNode->next;
@@ -244,6 +250,7 @@ bool addToHashTable(vector<node*> &hashTable, int value) {
 	return true;
 }
 
+// returns number of keys stored in the hash table
 int numOfEntries(vector<int> hashTable) {
 	int count = 0;
 	for (unsigned int n = 0; n < hashTable.size(); n++) {
@@ -254,6 +261,7 @@ int numOfEntries(vector<int> hashTable) {
 	return count;
 }
 
+// returns number of keys stored in the hash table
 int numOfEntries(vector<node*> hashTable) {
 	int count = 0;
 	node* curNode = NULL;
@@ -269,6 +277,7 @@ int numOfEntries(vector<node*> hashTable) {
 	return count;
 }
 
+// prints current entries in the hash table
 void printHashTable(vector<int> hashTable) {
 	cout << "Index: \tEntry: \n";
 	for (unsigned int n = 0; n < hashTable.size(); n++) {
@@ -281,6 +290,7 @@ void printHashTable(vector<int> hashTable) {
 	}
 }
 
+// prints current entries in the hash table
 void printHashTable(vector<node*> hashTable) {
 	node* curNode = NULL;
 	cout << "Index: \tEntries: \n";
@@ -300,6 +310,7 @@ void printHashTable(vector<node*> hashTable) {
 	}
 }
 
+// returns true if key is in hash table
 bool isKeyInHashTable(vector<int> hashTable, int key) 
 {
 	// Invalid search
@@ -313,6 +324,7 @@ bool isKeyInHashTable(vector<int> hashTable, int key)
 	return false;
 }
 
+// returns true if key is in hash table
 bool isKeyInHashTable(vector<node*> hashTable, int key) {
 	
 	// Invalid Search
@@ -335,11 +347,7 @@ bool isKeyInHashTable(vector<node*> hashTable, int key) {
 	return false;
 }
 
-
-
-
-
-
+// release memory taken by the chaining hash table
 void deleteHashTable(vector<node*> &hashTable) {
 	node* curNode = NULL;
 	node* nextNode = NULL;
@@ -355,11 +363,12 @@ void deleteHashTable(vector<node*> &hashTable) {
 	}
 }
 
+// main function
 int main() {
 
 
 	// ------------------------------- PART 1 -----------------------------------
-	/*vector<int> hashTable1;
+	vector<int> hashTable1;
 	vector<int> hashTable2;
 	vector<int> hashTable3;
 	vector<node*> hashTable4;
@@ -367,9 +376,9 @@ int main() {
 	int value;
 
 	for (int n = 0; n < SIZE; n++) {
-		hashTable1.push_back(NULL);
-		hashTable2.push_back(NULL);
-		hashTable3.push_back(NULL);
+		hashTable1.push_back(0);
+		hashTable2.push_back(0);
+		hashTable3.push_back(0);
 		hashTable4.push_back(NULL);
 	}
 
@@ -386,15 +395,27 @@ int main() {
 	cout << "Add integers to the hash table by typing them here and then pressing enter after each number: \n";
 	while (!hashTableFull) {
 		cin >> value;
-		addToHashTable(hashTable1, value, DOUBLE_HASHING);
+		addToHashTable(hashTable1, value, LINEAR_PROBING);
+		addToHashTable(hashTable2, value, QUADRATIC_PROBING);
+		addToHashTable(hashTable3, value, DOUBLE_HASHING);
+		addToHashTable(hashTable4, value);
 		if ((double)numOfEntries(hashTable1) / (double)SIZE >= loadRatio) {
 			hashTableFull = true;
 		}
 	}
+
+	// print tables
+	cout << endl << "Linear Probing:" << endl;
 	printHashTable(hashTable1);
+	cout << endl <<"Quadratic Probing:" << endl;
+	printHashTable(hashTable2);
+	cout << endl << "Double Hashing:" << endl;
+	printHashTable(hashTable3);
+	cout << endl << "Chaining:" << endl;
+	printHashTable(hashTable4);
 	
 
-*/
+	system("pause");
 
 	// ------------------------------- PART 2 -----------------------------------
 
@@ -489,12 +510,9 @@ int main() {
 		}
 	}
 
-
 	//ofstream myfile;
 	//myfile.open("C:\\Users\\Robin\\Source\\Repos\\DSHW6\\HafnerSteyer6\\Debug\\example.txt");
 	
-	
-
 	char* collResTypes[4] = { "linear", "quadratic", "double", "chaining" };
 	char* ratios[16] = { ".10",".15",".20",".25",".30",".35",".40",".45",".50",".55",".60",".65",".70",".75",".80",".85" };
 	cout << endl << "Ratio\tLinear\tQuad\tDouble\tChaining" << endl;
@@ -511,18 +529,6 @@ int main() {
 	}
 
 	//myfile.close();
-
-	
-	
-	
-
-
-
-
-
-
-
-	
 
 	system("pause");
 	return 0;
