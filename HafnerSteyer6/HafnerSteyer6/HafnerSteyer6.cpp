@@ -357,7 +357,10 @@ void deleteHashTable(vector<node*> &hashTable) {
 }
 
 int main() {
-	vector<int> hashTable1;
+
+
+	// ------------------------------- PART 1 -----------------------------------
+	/*vector<int> hashTable1;
 	vector<int> hashTable2;
 	vector<int> hashTable3;
 	vector<node*> hashTable4;
@@ -392,10 +395,9 @@ int main() {
 	printHashTable(hashTable1);
 	
 
+*/
 
-	system("pause");
-
-	// PART 2
+	// ------------------------------- PART 2 -----------------------------------
 
 	srand(time(NULL));
 	int tableSize = 1019;
@@ -464,27 +466,27 @@ int main() {
 	}
 
 
-	ofstream myfile;
-	myfile.open("C:\\Users\\Robin\\Source\\Repos\\DSHW6\\HafnerSteyer6\\Debug\\example.txt");
+	//ofstream myfile;
+	//myfile.open("C:\\Users\\Robin\\Source\\Repos\\DSHW6\\HafnerSteyer6\\Debug\\example.txt");
 	
 	
 
 	char* collResTypes[4] = { "linear", "quadratic", "double", "chaining" };
 	char* ratios[16] = { ".10",".15",".20",".25",".30",".35",".40",".45",".50",".55",".60",".65",".70",".75",".80",".85" };
 	cout << "Ratio\tLinear\tQuad\tDouble\tChaining" << endl;
-	myfile << "Ratio\tLinear\tQuad\tDouble\tChaining\n";
+	//myfile << "Ratio\tLinear\tQuad\tDouble\tChaining\n";
 	for (int c = 0; c < 16; c++) {
 		cout << ratios[c] << "\t";
-		myfile << ratios[c] << "\t";
+		//myfile << ratios[c] << "\t";
 		for (int r = 0; r < 4; r++) {
 			printf("%0.3f\t", averageComparisons[r][c]);
-			myfile << averageComparisons[r][c] << "\t";
+			//myfile << averageComparisons[r][c] << "\t";
 		}
 		cout << endl;
-		myfile << "\n";
+		//myfile << "\n";
 	}
 
-	myfile.close();
+	//myfile.close();
 
 	
 	
