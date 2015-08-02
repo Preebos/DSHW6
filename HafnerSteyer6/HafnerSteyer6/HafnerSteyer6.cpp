@@ -60,11 +60,25 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 
 			// resolve collision using linear probing
 			unsigned count = 0;
+
+			if (hashTable[index] == value) {
+				cout << "Number is already in the hash table" << endl;
+				return false;
+			}
+
+
+
 			while (hashTable[index] != 0) {
 				counter++;
 
 				index = (index + 1) % hashTable.size();
 				count++;
+
+				if (hashTable[index] == value) {
+					cout << "Number is already in the hash table" << endl;
+					return false;
+				}
+
 				if (hashTable[index] == 0) {
 					counter++;
 
@@ -96,6 +110,12 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 		else {
 			counter++;
 
+			if (hashTable[index] == value) {
+				cout << "Number is already in the hash table" << endl;
+				return false;
+			}
+
+
 			// resolve collision using linear probing
 			unsigned count = 0;
 			int skipFactor = 1;
@@ -103,6 +123,12 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 				counter++;
 
 				index = (index + skipFactor * skipFactor) % hashTable.size(); // increase by skipFacto^2 each time (1, 4, 9, 16, etc)
+
+				if (hashTable[index] == value) {
+					cout << "Number is already in the hash table" << endl;
+					return false;
+				}
+
 				count++;
 				skipFactor++; // double the amount of indices we skip
 
@@ -137,12 +163,23 @@ bool addToHashTable(vector<int> &hashTable, int value, collisionResolutionType c
 		else {
 			counter++;
 
+			if (hashTable[index] == value) {
+				cout << "Number is already in the hash table" << endl;
+				return false;
+			}
+
 			// resolve collision using double hashing
 			unsigned count = 0;
 			while (hashTable[index] != 0) {
 				counter++;
 
 				index = (index + (17 - (value % 17))) % hashTable.size();
+
+				if (hashTable[index] == value) {
+					cout << "Number is already in the hash table" << endl;
+					return false;
+				}
+
 				count++;
 				if (hashTable[index] == 0) {
 					counter++;
@@ -256,6 +293,46 @@ void printHashTable(vector<node*> hashTable) {
 	}
 }
 
+bool isKeyInHashTable(vector<int> hashTable, int key) 
+{
+	// Invalid search
+	if (key <= 0)
+		return false;
+
+	for (unsigned int n = 0; n < hashTable.size(); n++) {
+		if (hashTable[n] == key)
+			return true;
+	}
+	return false;
+}
+
+bool isKeyInHashTable(vector<node*> hashTable, int key) {
+	
+	// Invalid Search
+	if (key <= 0)
+		return false;
+	
+	node* curNode = NULL;
+	for (unsigned int n = 0; n < hashTable.size(); n++) {
+		if (hashTable[n] != NULL) {
+			curNode = hashTable[n];
+			while (curNode != NULL) {
+				if (curNode->val == key)
+					return true;
+
+				curNode = curNode->next;
+			}
+		}
+
+	}
+	return false;
+}
+
+
+
+
+
+
 void deleteHashTable(vector<node*> &hashTable) {
 	node* curNode = NULL;
 	node* nextNode = NULL;
@@ -273,7 +350,7 @@ void deleteHashTable(vector<node*> &hashTable) {
 }
 
 int main() {
-	/*vector<int> hashTable1;
+	vector<int> hashTable1;
 	vector<int> hashTable2;
 	vector<int> hashTable3;
 	vector<node*> hashTable4;
@@ -297,7 +374,7 @@ int main() {
 		cin >> loadRatio;
 	}
 
-	/*cout << "Add integers to the hash table by typing them here and then pressing enter after each number: \n";
+	cout << "Add integers to the hash table by typing them here and then pressing enter after each number: \n";
 	while (!hashTableFull) {
 		cin >> value;
 		addToHashTable(hashTable1, value, DOUBLE_HASHING);
@@ -305,99 +382,101 @@ int main() {
 			hashTableFull = true;
 		}
 	}
-	*/
+	printHashTable(hashTable1);
+	
 
 
 
 	// PART 2
-	srand(time(NULL));
-	int tableSize = 1009;
 
-	// Same random numbers so we can accurately test
-	vector<int> numberSequence;
-	for (int i = 0; i < tableSize; i++) {
-		numberSequence.push_back((rand() % 10000) + 1);
-	}
+	//srand(time(NULL));
+	//int tableSize = 1009;
 
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 16; j++) {
-			for (int k = 0; k < tableSize; k++) {
-				arrayOfHashTables[i][j].push_back(NULL);
-			}
-		}
-	}
-	for (int i = 0; i < 16; i++) {
-		for (int j = 0; j < tableSize; j++) {
-			chainingHashTable[i].push_back(NULL);
-		}
-	}
+	//// Same random numbers so we can accurately test
+	//vector<int> numberSequence;
+	//for (int i = 0; i < tableSize; i++) {
+	//	numberSequence.push_back((rand() % 10000) + 1);
+	//}
+
+	//for (int i = 0; i < 3; i++) {
+	//	for (int j = 0; j < 16; j++) {
+	//		for (int k = 0; k < tableSize; k++) {
+	//			arrayOfHashTables[i][j].push_back(NULL);
+	//		}
+	//	}
+	//}
+	//for (int i = 0; i < 16; i++) {
+	//	for (int j = 0; j < tableSize; j++) {
+	//		chainingHashTable[i].push_back(NULL);
+	//	}
+	//}
+
+	//
+	//double maxLoadRatio = .1;
+	//// for each different load ratio
+	//for (int i = 0; i < 16; i++) {
+
+	//	for (int j = 0; j < tableSize; j++) {
+	//		addToHashTable(arrayOfHashTables[0][i], numberSequence[j], LINEAR_PROBING);
+	//		totalComparisons[0][i] += counter;
+
+
+	//		addToHashTable(arrayOfHashTables[1][i], numberSequence[j], QUADRATIC_PROBING);
+	//		totalComparisons[1][i] += counter;
+
+	//		
+	//		addToHashTable(arrayOfHashTables[2][i], numberSequence[j], DOUBLE_HASHING);
+	//		totalComparisons[2][i] += counter;
+
+
+	//		addToHashTable(chainingHashTable[i], numberSequence[j]); // Crashes here
+	//		totalComparisons[3][i] += counter;
+
+	//		
+	//		// Break if load ratio is reached
+	//		if ((double)j / (double)tableSize >= maxLoadRatio) {
+	//			totalInsertions[i] = j;
+	//			deleteHashTable(chainingHashTable[i]);//
+	//			arrayOfHashTables[0][i].clear();//
+	//			arrayOfHashTables[1][i].clear();//
+	//			arrayOfHashTables[2][i].clear();//
+	//			chainingHashTable[i].clear();//
+	//			break;
+	//		}
+	//	}
+
+	//	maxLoadRatio += 0.05;
+	//}
+
+
+	//for (int i = 0; i < 4; i++) {
+	//	for (int j = 0; j < 16; j++) {
+	//		averageComparisons[i][j] = totalComparisons[i][j] / (double)totalInsertions[j];
+	//	}
+	//}
+
+	///*char* collResTypes[4] = { "linear", "quadratic", "double", "chaining" };
+	//cout << "load ratio:\t.10\t.15\t.20\t.25\t.30\t.35\t.40\t.45\t.50\t.55\t.60\t.65\t.70\t.75\t.80\t.85" << endl;
+	//for (int r = 0; r < 4; r++) {
+	//	cout << collResTypes[r] << "\t";
+	//	for (int c = 0; c < 16; c++) {
+	//		printf("%0.4f\t", averageComparisons[r][c]);
+	//	}
+	//	cout << endl << endl;
+	//}*/
+
+	//char* collResTypes[4] = { "linear", "quadratic", "double", "chaining" };
+	//char* ratios[16] = { ".10",".15",".20",".25",".30",".35",".40",".45",".50",".55",".60",".65",".70",".75",".80",".85" };
+	//cout << "Ratio\tLinear\tQuad\tDouble\tChaining" << endl;
+	//for (int c = 0; c < 16; c++) {
+	//	cout << ratios[c] << "\t";
+	//	for (int r = 0; r < 4; r++) {
+	//		printf("%0.3f\t", averageComparisons[r][c]);
+	//	}
+	//	cout << endl;
+	//}
 
 	
-	double maxLoadRatio = .1;
-	// for each different load ratio
-	for (int i = 0; i < 16; i++) {
-
-		for (int j = 0; j < tableSize; j++) {
-			addToHashTable(arrayOfHashTables[0][i], numberSequence[j], LINEAR_PROBING);
-			totalComparisons[0][i] += counter;
-
-
-			addToHashTable(arrayOfHashTables[1][i], numberSequence[j], QUADRATIC_PROBING);
-			totalComparisons[1][i] += counter;
-
-			
-			addToHashTable(arrayOfHashTables[2][i], numberSequence[j], DOUBLE_HASHING);
-			totalComparisons[2][i] += counter;
-
-
-			addToHashTable(chainingHashTable[i], numberSequence[j]); // Crashes here
-			totalComparisons[3][i] += counter;
-
-			
-			// Break if load ratio is reached
-			if ((double)j / (double)tableSize >= maxLoadRatio) {
-				totalInsertions[i] = j;
-				deleteHashTable(chainingHashTable[i]);//
-				arrayOfHashTables[0][i].clear();//
-				arrayOfHashTables[1][i].clear();//
-				arrayOfHashTables[2][i].clear();//
-				chainingHashTable[i].clear();//
-				break;
-			}
-		}
-
-		maxLoadRatio += 0.05;
-	}
-
-
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 16; j++) {
-			averageComparisons[i][j] = totalComparisons[i][j] / (double)totalInsertions[j];
-		}
-	}
-
-	/*char* collResTypes[4] = { "linear", "quadratic", "double", "chaining" };
-	cout << "load ratio:\t.10\t.15\t.20\t.25\t.30\t.35\t.40\t.45\t.50\t.55\t.60\t.65\t.70\t.75\t.80\t.85" << endl;
-	for (int r = 0; r < 4; r++) {
-		cout << collResTypes[r] << "\t";
-		for (int c = 0; c < 16; c++) {
-			printf("%0.4f\t", averageComparisons[r][c]);
-		}
-		cout << endl << endl;
-	}*/
-
-	char* collResTypes[4] = { "linear", "quadratic", "double", "chaining" };
-	char* ratios[16] = { ".10",".15",".20",".25",".30",".35",".40",".45",".50",".55",".60",".65",".70",".75",".80",".85" };
-	cout << "Ratio\tLinear\tQuad\tDouble\tChaining" << endl;
-	for (int c = 0; c < 16; c++) {
-		cout << ratios[c] << "\t";
-		for (int r = 0; r < 4; r++) {
-			printf("%0.3f\t", averageComparisons[r][c]);
-		}
-		cout << endl;
-	}
-
-	
 	
 	
 
@@ -407,7 +486,7 @@ int main() {
 
 
 
-	//printHashTable(hashTable1);
+	
 
 	system("pause");
 	return 0;
