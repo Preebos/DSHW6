@@ -389,92 +389,92 @@ int main() {
 
 	// PART 2
 
-	//srand(time(NULL));
-	//int tableSize = 1009;
+	srand(time(NULL));
+	int tableSize = 1009;
 
-	//// Same random numbers so we can accurately test
-	//vector<int> numberSequence;
-	//for (int i = 0; i < tableSize; i++) {
-	//	numberSequence.push_back((rand() % 10000) + 1);
-	//}
+	// Same random numbers so we can accurately test
+	vector<int> numberSequence;
+	for (int i = 0; i < tableSize; i++) {
+		numberSequence.push_back((rand() % 10000) + 1);
+	}
 
-	//for (int i = 0; i < 3; i++) {
-	//	for (int j = 0; j < 16; j++) {
-	//		for (int k = 0; k < tableSize; k++) {
-	//			arrayOfHashTables[i][j].push_back(NULL);
-	//		}
-	//	}
-	//}
-	//for (int i = 0; i < 16; i++) {
-	//	for (int j = 0; j < tableSize; j++) {
-	//		chainingHashTable[i].push_back(NULL);
-	//	}
-	//}
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 16; j++) {
+			for (int k = 0; k < tableSize; k++) {
+				arrayOfHashTables[i][j].push_back(NULL);
+			}
+		}
+	}
+	for (int i = 0; i < 16; i++) {
+		for (int j = 0; j < tableSize; j++) {
+			chainingHashTable[i].push_back(NULL);
+		}
+	}
 
-	//
-	//double maxLoadRatio = .1;
-	//// for each different load ratio
-	//for (int i = 0; i < 16; i++) {
+	
+	double maxLoadRatio = .1;
+	// for each different load ratio
+	for (int i = 0; i < 16; i++) {
 
-	//	for (int j = 0; j < tableSize; j++) {
-	//		addToHashTable(arrayOfHashTables[0][i], numberSequence[j], LINEAR_PROBING);
-	//		totalComparisons[0][i] += counter;
-
-
-	//		addToHashTable(arrayOfHashTables[1][i], numberSequence[j], QUADRATIC_PROBING);
-	//		totalComparisons[1][i] += counter;
-
-	//		
-	//		addToHashTable(arrayOfHashTables[2][i], numberSequence[j], DOUBLE_HASHING);
-	//		totalComparisons[2][i] += counter;
+		for (int j = 0; j < tableSize; j++) {
+			addToHashTable(arrayOfHashTables[0][i], numberSequence[j], LINEAR_PROBING);
+			totalComparisons[0][i] += counter;
 
 
-	//		addToHashTable(chainingHashTable[i], numberSequence[j]); // Crashes here
-	//		totalComparisons[3][i] += counter;
+			addToHashTable(arrayOfHashTables[1][i], numberSequence[j], QUADRATIC_PROBING);
+			totalComparisons[1][i] += counter;
 
-	//		
-	//		// Break if load ratio is reached
-	//		if ((double)j / (double)tableSize >= maxLoadRatio) {
-	//			totalInsertions[i] = j;
-	//			deleteHashTable(chainingHashTable[i]);//
-	//			arrayOfHashTables[0][i].clear();//
-	//			arrayOfHashTables[1][i].clear();//
-	//			arrayOfHashTables[2][i].clear();//
-	//			chainingHashTable[i].clear();//
-	//			break;
-	//		}
-	//	}
-
-	//	maxLoadRatio += 0.05;
-	//}
+			
+			addToHashTable(arrayOfHashTables[2][i], numberSequence[j], DOUBLE_HASHING);
+			totalComparisons[2][i] += counter;
 
 
-	//for (int i = 0; i < 4; i++) {
-	//	for (int j = 0; j < 16; j++) {
-	//		averageComparisons[i][j] = totalComparisons[i][j] / (double)totalInsertions[j];
-	//	}
-	//}
+			addToHashTable(chainingHashTable[i], numberSequence[j]); // Crashes here
+			totalComparisons[3][i] += counter;
 
-	///*char* collResTypes[4] = { "linear", "quadratic", "double", "chaining" };
-	//cout << "load ratio:\t.10\t.15\t.20\t.25\t.30\t.35\t.40\t.45\t.50\t.55\t.60\t.65\t.70\t.75\t.80\t.85" << endl;
-	//for (int r = 0; r < 4; r++) {
-	//	cout << collResTypes[r] << "\t";
-	//	for (int c = 0; c < 16; c++) {
-	//		printf("%0.4f\t", averageComparisons[r][c]);
-	//	}
-	//	cout << endl << endl;
-	//}*/
+			
+			// Break if load ratio is reached
+			if ((double)j / (double)tableSize >= maxLoadRatio) {
+				totalInsertions[i] = j;
+				deleteHashTable(chainingHashTable[i]);//
+				arrayOfHashTables[0][i].clear();//
+				arrayOfHashTables[1][i].clear();//
+				arrayOfHashTables[2][i].clear();//
+				chainingHashTable[i].clear();//
+				break;
+			}
+		}
 
-	//char* collResTypes[4] = { "linear", "quadratic", "double", "chaining" };
-	//char* ratios[16] = { ".10",".15",".20",".25",".30",".35",".40",".45",".50",".55",".60",".65",".70",".75",".80",".85" };
-	//cout << "Ratio\tLinear\tQuad\tDouble\tChaining" << endl;
-	//for (int c = 0; c < 16; c++) {
-	//	cout << ratios[c] << "\t";
-	//	for (int r = 0; r < 4; r++) {
-	//		printf("%0.3f\t", averageComparisons[r][c]);
-	//	}
-	//	cout << endl;
-	//}
+		maxLoadRatio += 0.05;
+	}
+
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 16; j++) {
+			averageComparisons[i][j] = totalComparisons[i][j] / (double)totalInsertions[j];
+		}
+	}
+
+	/*char* collResTypes[4] = { "linear", "quadratic", "double", "chaining" };
+	cout << "load ratio:\t.10\t.15\t.20\t.25\t.30\t.35\t.40\t.45\t.50\t.55\t.60\t.65\t.70\t.75\t.80\t.85" << endl;
+	for (int r = 0; r < 4; r++) {
+		cout << collResTypes[r] << "\t";
+		for (int c = 0; c < 16; c++) {
+			printf("%0.4f\t", averageComparisons[r][c]);
+		}
+		cout << endl << endl;
+	}*/
+
+	char* collResTypes[4] = { "linear", "quadratic", "double", "chaining" };
+	char* ratios[16] = { ".10",".15",".20",".25",".30",".35",".40",".45",".50",".55",".60",".65",".70",".75",".80",".85" };
+	cout << "Ratio\tLinear\tQuad\tDouble\tChaining" << endl;
+	for (int c = 0; c < 16; c++) {
+		cout << ratios[c] << "\t";
+		for (int r = 0; r < 4; r++) {
+			printf("%0.3f\t", averageComparisons[r][c]);
+		}
+		cout << endl;
+	}
 
 	
 	
