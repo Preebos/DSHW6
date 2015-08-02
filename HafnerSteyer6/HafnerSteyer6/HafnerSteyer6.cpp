@@ -504,7 +504,8 @@ int main() {
 	
 	char* collResTypes[4] = { "linear", "quadratic", "double", "chaining" };
 	char* ratios[16] = { ".10",".15",".20",".25",".30",".35",".40",".45",".50",".55",".60",".65",".70",".75",".80",".85" };
-	cout << endl << "Ratio\tLinear\tQuad\tDouble\tChaining" << endl;
+	cout << endl << "Average Comparisons, size = " << tableSize << endl;
+	cout << "Ratio\tLinear\tQuad\tDouble\tChaining" << endl;
 	//myfile << "Ratio\tLinear\tQuad\tDouble\tChaining\n";
 	for (int c = 0; c < 16; c++) {
 		cout << ratios[c] << "\t";
