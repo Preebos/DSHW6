@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <ctime>
 #include <vector>
-
+#include <string>
 #include <fstream>
 
 using namespace std;
@@ -351,7 +351,6 @@ void deleteHashTable(vector<node*> &hashTable) {
 				delete curNode;
 				curNode = nextNode;
 			}
-			cout << endl;
 		}
 	}
 }
@@ -421,6 +420,9 @@ int main() {
 		}
 	}
 
+	streambuf *coutbuf = cout.rdbuf();
+	cout.rdbuf(NULL);
+
 	
 	double maxLoadRatio = .1;
 	// for each different load ratio
@@ -457,6 +459,8 @@ int main() {
 
 		maxLoadRatio += 0.05;
 	}
+
+	cout.rdbuf(coutbuf);
 
 
 	for (int i = 0; i < 4; i++) {
